@@ -10,7 +10,7 @@ show databases;
 use database_name;
 
 <!-- drop database & table-->
-DROP database_name;
+DROP DATABASE database_name;
 DROP TABLE table_name;
 
 <!-- create table -->
