@@ -112,6 +112,19 @@ select student.name,contact,books.title from books join student on books.id=stud
 
 <!-- JOIN USING WITH ALIAS -->
 
+<!-- apply multiple table join using aggregate functon-->
+
+SELECT bks.title AS name,bks.author AS writer,std.contact AS number FROM
+books AS bks,student AS std WHERE bks.id = std.book_id AND bks.title = std.book_name;
+
+SELECT bks.title AS name,bks.author AS writer,std.contact AS number FROM books AS bks,student AS std WHERE bks.id = std.book_id;
+
+SELECT bks.title,bks.author FROM books AS bks RIGHT JOIN student AS stud
+ON bks.id=stud.book_id;
+
+SELECT bks.title,bks.author FROM books AS bks LEFT JOIN student AS stud
+ON bks.id=stud.book_id;
+
 <!-- syntax :- SELECT alias_name.column_name as show_column_name, alias_name1.column_name1 as show_column_name1 from table_name as alias_name,table_name2 as alias_name1 where alias_name.column_name = alias_name1.column_name; -->
 
 select bookname.title as book_name,stuname.name as student_name from books as bookname,student as stuname where bookname.id = stuname.id;
@@ -142,6 +155,7 @@ ALTER TABLE table_name CHANGE old_column_name new_column_name DATATYPE NOT NULL;
 
 ALTER TABLE table_name DROP column_name; <!-- DROP USE WHEN DROP COLUMN -->
 
+
 <!-- MODIFY COLUMN -->
 
 ALTER TABLE student MODIFY book_name varchar(255) not null;
@@ -155,12 +169,15 @@ select title,sum(price) as total from books group by title;
 <!-- use a where condition in group by -->
 select bktitle.title as book_name,count(*) as total from books as bktitle,student as stname where stname.book_id = bktitle.id group by bktitle.id;
 
+
+select bks.title as name,count(*) as data from books as bks,student as stud where bks.id = stud.book_id group by bks.id;
+
 <!-- without using alias and write group by-->
 select sum(price) from books,student where student.book_id=books.id group by title;
 
 select count(price) from books,student where student.book_id=books.id group by contact;
 
-select books.title,student.book_name from books,student where student.book_name=books.title group by books.id;
+select books.title,student.book_name from books,student where student book_name=books.title group by books.id;
 
 select count(book_id) from books,student where books.id = student.book_id group by books.id;
 
@@ -172,4 +189,70 @@ select sum(price) from books,student where books.id = student.book_id group by b
 
 select count(*) from books,student where books.id = student.book_id group by books.id;
 
-select * from books,student where books.id = student.book_id;
+
+<!-- select * from books,student where books.id = student.book_id; -->
+
+
+select books.title,count(*) from books,student where student.book_id=books.id group by books.author;
+
+
+SET sql_mode=(SELECT CONCAT(@@sql_mode,'ONLY_FULL_GROUP_BY',''));<!-- apply for full_group access -->
+
+<!-- SORT ,OFFSET and LIMIT Clause -->
+
+SELECT * FROM books AS bks ORDER BY bks.price ASC;
+SELECT * FROM books AS bks ORDER BY bks.price DESC;
+
+SELECT * FROM books ORDER BY books.price DESC LIMIT 0,2;
+SELECT * FROM books LIMIT 2 OFFSET 1;
+
+<!--  Combining aliases and ORDER BY together  -->
+
+select title as book_name,author as writer from books order by price desc;
+
+select title as book_name,author as writer from books order by price asc;
+
+
+<!-- Multiple sorting  -->
+
+SELECT bks.title,bks.author,stud.name FROM books AS bks,student AS stud WHERE bks.id=stud.book_id AND bks.author = 'Vyasa';
+
+SELECT bks.title,bks.author,stud.name FROM books AS bks,student AS stud WHERE bks.id = stud.book_id ORDER BY bks.id DESC;
+
+
+<!-- Independent subquery -->
+
+SELECT nm.title,nm.price FROM books AS nm WHERE  nm.price >= (SELECT MIN(e.book_id) FROM student AS e);
+
+<!-- Union operator -->
+
+SELECT title FROM books UNION SELECT name FROM student ORDER BY title;
+
+
+<!-- perform extra Query with OR and AND conditions-->
+
+select * from books where  title like 'B%';
+
+select * from books where (price >= 80 or title like 'B%');
+
+select * from books where (price >= 80 or title like 'B%')and author = 'Vyasa';
+
+<!-- perform Correlated subquery -->
+
+SELECT bks.title AS name,bks.author AS writer,stud.contact FROM books AS
+bks,student AS stud WHERE bks.price >= (SELECT AVG(e.price)FROM books AS e);
+
+SELECT bks.title AS name,bks.price,bks.author AS writer,stud.contact FROM books AS bks,stu
+dent AS stud WHERE bks.price <= (SELECT AVG(e.price)FROM books AS e);
+
+SELECT bks.title AS name,bks.price,bks.author AS writer,stud.contact FROM books AS bks,stu
+dent AS stud WHERE bks.price >= (SELECT AVG(e.price)FROM books AS e);
+
+<!--what is Transactions :- a transaction is a logical group of task or you can define it as a group of commands that change data stored in database. -->
+
+<!-- update with acid properties  -->
+ update student set contact=1111 where name=meet;
+
+ <!-- rollback transaction command is last transaction rollback to old data -->
+ <!-- commit transaction for use commit code -->
+ <!-- NORMALIZATION is a databse design technique that organizes tables in a manner that reduces redundancy(useless) and dependency of data -->
