@@ -251,7 +251,7 @@ dent AS stud WHERE bks.price >= (SELECT AVG(e.price)FROM books AS e);
 <!--what is Transactions :- a transaction is a logical group of task or you can define it as a group of commands that change data stored in database. -->
 
 <!-- update with acid properties  -->
- update student set contact=1111 where name=meet
+ update student set contact=1111 where name=meet;
 
  <!-- rollback transaction command is last transaction rollback to old data -->
  <!-- commit transaction for use commit code -->
