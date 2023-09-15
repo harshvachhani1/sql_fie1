@@ -70,12 +70,13 @@ SELECT title FROM books WHERE title LIKE '%a%'; <!-- START AND END BOTH SIDE CHE
 
 <!-- ALIAS IA A LABEL COLUMN TITLE CHANGE TEMPORARY-->
 
-SELECT title AS book_title, author AS name
-FROM books
-WHERE book = 'Bhagavad Gita' AND name = 'Vyasa';
+SELECT title AS book_title, author AS name FROM books WHERE books.title = 'Bhagavad Gita' AND books.author = 'Vyasa';
 
-SELECT column_name AS alias_name
-FROM table_name;
+SELECT bks.title AS book_title,bks.author AS writer FROM books AS bks WHERE bks.title='Bhagavad Gita' AND bks.author = 'Vyasa';
+
+SELECT title AS book_title FROM books AS tit WHERE title = 'Bhagavad Gita';
+
+<!-- SELECT column_name AS alias_name FROM table_name; -->
 
 <!-- CHECK VALUE IS NULL OR NOT NULL -->
 
@@ -154,7 +155,6 @@ ALTER TABLE table_name ADD new_column_name varchar(24) NOT NULL AFTER 'column_na
 ALTER TABLE table_name CHANGE old_column_name new_column_name DATATYPE NOT NULL;
 
 ALTER TABLE table_name DROP column_name; <!-- DROP USE WHEN DROP COLUMN -->
-
 
 <!-- MODIFY COLUMN -->
 
@@ -256,3 +256,7 @@ dent AS stud WHERE bks.price >= (SELECT AVG(e.price)FROM books AS e);
  <!-- rollback transaction command is last transaction rollback to old data -->
  <!-- commit transaction for use commit code -->
  <!-- NORMALIZATION is a databse design technique that organizes tables in a manner that reduces redundancy(useless) and dependency of data -->
+
+ <!-- modify database using with cli -->
+
+ <!--  -->
